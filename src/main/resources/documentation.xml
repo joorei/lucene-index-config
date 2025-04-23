@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+	<entry key="config">This is the configuration for a single Lucene index. As a reminder: an index just contains documents with fields. There is no built-in concept of Document "types" or sub-indexes beside having different fields with different values for different documents.</entry>
+	<entry key="labels">The labels shown for this configuration in different languages.</entry>
+	<entry key="labels.fallback">Used as label if none of the defined languages apply.</entry>
+	<entry key="index">This is the configuration for a single Lucene index. As a reminder: an index just contains documents with fields. There is no built-in concept of Document "types" or sub-indexes beside having different fields with different values for different documents.</entry>
+	<entry key="facetConfig">A facet configuration that can be used to configure document fields.</entry>
+	<entry key="facetConfig.identifier">Must be unique across the facetConfig elements.</entry>
+	<entry key="drillDownTermsIndexing">Must be one of very specific values.</entry>
+	<entry key="fieldNamesDimension">The field name to be used to store all other field names present in a document. This allows "missing field" searches.</entry>
+	<entry key="documentField">One of the many fields a document may have in the Lucene index.</entry>
+	<entry key="description">The description to be shown for this field.</entry>
+	<entry key="name">The identifier attribute value must be unique for each field.</entry>
+	<entry key="documentField.facetConfig">Must be unique across the facetConfig elements of all field elements.</entry>
+	<entry key="documentField.facetDimension">Must be unique across the facetConfig elements of all field elements. Defaults to the name attribute value.</entry>
+	<entry key="documentField.keyField">Should the analyzer handle this field as if it contains key values.</entry>
+	<entry key="documentField.required">Shall this field be present in each and every document. I.e. must each fieldMapping for each entity in each adapter provide a value for this field.</entry>
+	<entry key="adapter">The adapters from which to create Lucene documents.</entry>
+	<entry key="adapter.identifier">Each adapter has a unique identifier.</entry>
+	<entry key="entity">Each adapter provides at least one entity "type". From each entity instance loaded at runtime a Lucene document will be created.</entry>
+	<entry key="entity.identifier">The identifier of the entity, i.e. the entity name used by the adapter.</entry>
+	<entry key="fieldMapping">For each field denoted as required in the document element, a fieldMapping element must exist in the entity element, referencing the field identifier via the for-attribute.</entry>
+	<entry key="fieldMapping.for">The document field for which this mapping the value or values provides.</entry>
+	<entry key="fieldMapping.class">Defines the class in which the method shall be called.</entry>
+	<entry key="fieldMapping.method">Defines the static method in the class to be calld with the field identifier value, the entity handle and (optionally if any are defined) the parameters defined in the element (in the same order).</entry>
+	<entry key="parameter">Uses the data from a field defined for the adapter entity as parameter.</entry>
+	<entry key="parameter.type">The exact object type expected by the method defined in the fieldMapping element.</entry>
+	<entry key="parameter.convertClass">The class to use to cast the defined string to a type compatible with the one defined in the type-attribute.</entry>
+	<entry key="parameter.convertMethod">The static method to convert the value. If a method with the defined name exists that takes a string as first argument and a map as second argument, then the defined value and the fields available from the adaper for this entity will be passed as parameters. If this is not the case, but the method exists, taking a string as only parameter, then that method is called.</entry>
+</properties>

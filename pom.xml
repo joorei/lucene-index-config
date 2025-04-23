@@ -1,0 +1,87 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>lucene-index-config</artifactId>
+	<version>0.0.8</version>
+	<name>lucene-index-config</name>
+	<description>Provides a configuration format from which a Lucene index can be created and filled.</description>
+	<parent>
+		<groupId>org.codeturnery</groupId>
+		<artifactId>common-java-project-pom</artifactId>
+		<version>1.0.4</version>
+	</parent>
+
+	<dependencies>
+		<dependency>
+			<groupId>javax.xml.bind</groupId>
+			<artifactId>jaxb-api</artifactId>
+			<version>2.3.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.glassfish.jaxb</groupId>
+			<artifactId>jaxb-xjc</artifactId>
+			<version>3.0.2</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.codeturnery</groupId>
+			<artifactId>java-toolbox</artifactId>
+			<version>0.5.0</version>
+		</dependency>
+	</dependencies>
+	<build>
+		<plugins>
+			<!-- Preprocess XSD template before JAXB plugin -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>3.5.0</version>
+				<executions>
+					<execution>
+						<id>replace-variables-in-xsd</id>
+						<!-- Make the preprocessing run before the JAXB class generation -->
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>java</goal>
+						</goals>
+						<configuration>
+							<mainClass>org.codeturnery.lucene.transfer.config.XsdPreprocessor</mainClass>
+							<classpathScope>compile</classpathScope>
+							<arguments>
+								<argument>${basedir}/src/main/resources/documentation.xml</argument>
+								<argument>${basedir}/src/main/resources/index-config.template.xsd</argument>
+								<argument>${basedir}/src/main/resources/index-config.xsd</argument>
+							</arguments>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- generate Java files from XSD -->
+			<!-- For the configuration the tutorial at
+			 http://websystique.com/java/jaxb/jaxb-codegeneration-maven-example/
+			 was used. When using (e.g.) "install" as goal the code will be written into the target
+			 directory as specified below. -->
+			<plugin>
+				<groupId>org.jvnet.jaxb2.maven2</groupId>
+				<artifactId>maven-jaxb2-plugin</artifactId>
+				<version>0.15.3</version>
+				<executions>
+					<execution>
+						<id>generate-classes-from-xsd</id>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<schemaDirectory>${basedir}/src/main/resources</schemaDirectory>
+							<schemaIncludes>
+								<include>index-config.xsd</include>
+							</schemaIncludes>
+							<generateDirectory>${project.build.directory}/generated-sources/xjc/workflow</generateDirectory>
+							<generatePackage>org.codeturnery.lucene.transfer.config</generatePackage>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>

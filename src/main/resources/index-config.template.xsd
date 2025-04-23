@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+	xmlns="http://codeturnery.org/lucene"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:o="http://www.codeturnery.org/lucene"
+	targetNamespace="http://codeturnery.org/lucene"
+	elementFormDefault="qualified"
+	version="1.1">
+
+	<!-- TODO:  -->
+	<!-- 	xmlns:xhtml="http://www.w3.org/1999/xhtml" -->
+
+	<!-- Having xmlns:html above is not enough to use XHTML elements, this import is needed as well. -->
+	<!--<xs:import namespace="http://www.w3.org/1999/xhtml"
+	      schemaLocation="http://www.w3.org/2002/08/xhtml/xhtml1-strict.xsd" />-->
+
+	<xs:element name="config">
+		<xs:annotation>
+			<xs:documentation>{config}</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="version" type="xs:string" />
+				<xs:element name="identifier" type="xs:string" />
+				<xs:element name="labels">
+					<xs:annotation>
+						<xs:documentation>{labels}</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="en" type="xs:string" />
+						</xs:sequence>
+						<xs:attribute name="fallback" type="xs:string" use="required">
+							<xs:annotation>
+								<xs:documentation>{labels.fallback}</xs:documentation>
+							</xs:annotation>
+						</xs:attribute>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="index">
+					<xs:annotation>
+						<xs:documentation>{index}</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="ramBufferSizeMb" type="xs:double" />
+							<xs:element name="taxonomyPath" type="xs:string" />
+							<xs:element name="indexPath" type="xs:string" />
+							<xs:element name="facetConfig" minOccurs="0" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>{facetConfig}</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="multiValued" type="xs:boolean" />
+										<xs:element name="hierarchical" type="xs:boolean" />
+										<xs:element name="drillDownTermsIndexing" type="xs:string" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>{drillDownTermsIndexing}</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="indexFieldName" type="xs:string" />
+										<xs:element name="dimCountRequired" type="xs:boolean" />
+									</xs:sequence>
+									<xs:attribute name="identifier" type="xs:string" use="required">
+										<xs:annotation>
+											<xs:documentation>{facetConfig.identifier}</xs:documentation>
+										</xs:annotation>
+									</xs:attribute>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="fieldNamesDimension" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>{fieldNamesDimension}</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="documentField" minOccurs="1" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>{documentField}</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="description" minOccurs="0" maxOccurs="1">
+											<xs:annotation>
+												<xs:documentation>{description}</xs:documentation>
+											</xs:annotation>
+											<xs:complexType mixed="true">
+												<xs:sequence>
+													<!-- Enable selected elements -->
+													<!--<xs:element ref="xhtml:p" minOccurs="0" maxOccurs="unbounded" />
+													<xs:element ref="xhtml:a" minOccurs="0" maxOccurs="unbounded" />
+													<xs:element ref="xhtml:strong" minOccurs="0" maxOccurs="unbounded" />
+													<xs:element ref="xhtml:em" minOccurs="0" maxOccurs="unbounded" />
+													<xs:element ref="xhtml:ol" minOccurs="0" maxOccurs="unbounded" />
+													<xs:element ref="xhtml:ul" minOccurs="0" maxOccurs="unbounded" />
+													<xs:element ref="xhtml:li" minOccurs="0" maxOccurs="unbounded" />-->
+													<!-- Add any other XHTML elements you want to allow -->
+
+													<!-- Alternatively, allow any element from the XHTML namespace -->
+													<xs:any namespace="http://www.w3.org/1999/xhtml" processContents="lax" minOccurs="0" maxOccurs="unbounded" />
+
+													<xs:element name="p" minOccurs="0" maxOccurs="unbounded" />
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+									<xs:attribute name="name" type="xs:string" use="required">
+										<xs:annotation>
+											<xs:documentation>{name}</xs:documentation>
+										</xs:annotation>
+									</xs:attribute>
+									<xs:attribute name="facetConfig" type="xs:string" use="required">
+										<xs:annotation>
+											<xs:documentation>{documentField.facetConfig}</xs:documentation>
+										</xs:annotation>
+									</xs:attribute>
+									<xs:attribute name="facetDimension" type="xs:string" use="optional">
+										<xs:annotation>
+											<xs:documentation>{documentField.facetDimension}</xs:documentation>
+										</xs:annotation>
+									</xs:attribute>
+									<xs:attribute name="keyField" type="xs:boolean">
+										<xs:annotation>
+											<xs:documentation>{documentField.keyField}</xs:documentation>
+										</xs:annotation>
+									</xs:attribute>
+									<xs:attribute name="required" type="xs:boolean">
+										<xs:annotation>
+											<xs:documentation>{documentField.required}</xs:documentation>
+										</xs:annotation>
+									</xs:attribute>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+
+					<!-- TODO: does not work?-->
+					<xs:unique name="unique-facetConfig-identifiers">
+						<xs:selector xpath="o:facetConfig" />
+						<xs:field xpath="@identifier" />
+					</xs:unique>
+
+					<!-- TODO: does not work?-->
+					<xs:unique name="unique-documentField-names">
+						<xs:selector xpath="o:documentField" />
+						<xs:field xpath="@name" />
+					</xs:unique>
+				</xs:element>
+				<xs:element name="adapter" minOccurs="1" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>{adapter}</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="entity" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>{entity}</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="fieldMapping" maxOccurs="unbounded">
+											<xs:annotation>
+												<xs:documentation>{fieldMapping}</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="parameter" minOccurs="1" maxOccurs="unbounded">
+														<xs:annotation>
+															<xs:documentation>{parameter}</xs:documentation>
+														</xs:annotation>
+														<xs:complexType>
+															<xs:simpleContent>
+																<xs:extension base="xs:string">
+																	<xs:attribute name="type" type="FullyQualifiedClassName" use="required">
+																		<xs:annotation>
+																			<xs:documentation>{parameter.type}</xs:documentation>
+																		</xs:annotation>
+																	</xs:attribute>
+																	<xs:attribute name="convertClass" type="FullyQualifiedClassName" use="required">
+																		<xs:annotation>
+																			<xs:documentation>{parameter.convertClass}</xs:documentation>
+																		</xs:annotation>
+																	</xs:attribute>
+																	<xs:attribute name="convertMethod" type="MethodName" use="required">
+																		<xs:annotation>
+																			<xs:documentation>{parameter.convertMethod}</xs:documentation>
+																		</xs:annotation>
+																	</xs:attribute>
+																</xs:extension>
+															</xs:simpleContent>
+														</xs:complexType>
+													</xs:element>
+												</xs:sequence>
+												<xs:attribute name="for" type="xs:string" use="required">
+													<xs:annotation>
+														<xs:documentation>{fieldMapping.for}</xs:documentation>
+													</xs:annotation>
+												</xs:attribute>
+												<xs:attribute name="class" type="FullyQualifiedClassName" use="required">
+													<xs:annotation>
+														<xs:documentation>{fieldMapping.class}</xs:documentation>
+													</xs:annotation>
+												</xs:attribute>
+												<xs:attribute name="method" type="MethodName" use="required">
+													<xs:annotation>
+														<xs:documentation>{fieldMapping.method}</xs:documentation>
+													</xs:annotation>
+												</xs:attribute>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+									<xs:attribute name="identifier" type="xs:string" use="required">
+										<xs:annotation>
+											<xs:documentation>{entity.identifier}</xs:documentation>
+										</xs:annotation>
+									</xs:attribute>
+								</xs:complexType>
+
+							</xs:element>
+
+						</xs:sequence>
+						<xs:attribute name="identifier" type="xs:string" use="required">
+							<xs:annotation>
+								<xs:documentation>{adapter.identifier}</xs:documentation>
+							</xs:annotation>
+						</xs:attribute>
+
+					</xs:complexType>
+
+					<!-- TODO: test if these unique definitions work -->
+					<xs:unique name="unique-entities-in-each-adapter">
+						<xs:selector xpath="o:entity" />
+						<xs:field xpath="@identifier" />
+					</xs:unique>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+		<xs:unique name="unique-adapters">
+			<xs:selector xpath="o:adapter" />
+			<xs:field xpath="@identifier" />
+		</xs:unique>
+
+	</xs:element>
+
+	<!-- TODO: does not work, because Eclipse complains xs:assert must not exist no matter where I put it-->
+	<!-- Assertions to ensure that the 'fieldMapping' references existing fields -->
+
+	<!--<xs:assert test="not(document/field[required='true' and not(../fieldSource[@for = identifier])])"/>-->
+	<!--<xs:assert test="for in $document//field/@identifier" xmlns="http://www.w3.org/2001/XMLSchema-instance">
+		<xs:annotation>
+			<xs:documentation>
+				Ensures that every fieldMapping references an existing field identifier in the document section.
+			</xs:documentation>
+		</xs:annotation>
+	</xs:assert>-->
+
+	<xs:simpleType name="FullyQualifiedClassName">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[a-zA-Z_][a-zA-Z0-9_]*(\.[a-zA-Z_][a-zA-Z0-9_]*)*" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="MethodName">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="[a-z_][a-zA-Z0-9_]*" />
+		</xs:restriction>
+	</xs:simpleType>
+
+</xs:schema>
